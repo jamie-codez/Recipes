@@ -1,6 +1,7 @@
 package com.softech.code.recipe.views.category
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.softech.code.recipe.databinding.FragmentCategoryBinding
 import com.softech.code.recipe.model.Categories
 import com.softech.code.recipe.model.Meals
 import com.softech.code.recipe.utils.Utils
+import com.softech.code.recipe.views.detail.DetailActivity
 import com.squareup.picasso.Picasso
 
 class CategoryFragment : Fragment(), CategoryView {
@@ -39,7 +41,8 @@ class CategoryFragment : Fragment(), CategoryView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        repository = FavoriteRepository(requireActivity().application)
+        repository =
+            FavoriteRepository(requireActivity().application)
 
         if (arguments != null) {
             binding.textCategory.text = requireArguments().getString("EXTRA_DATA_DESC")
@@ -66,9 +69,9 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     private fun onClick() {
-        descDialog!!.setPositiveButton(
-            "CLOSE"
-        ) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
+        descDialog!!.setPositiveButton("CLOSE") {
+                dialog: DialogInterface, _: Int -> dialog.dismiss()
+        }
         descDialog!!.show()
     }
 
@@ -88,6 +91,13 @@ class CategoryFragment : Fragment(), CategoryView {
         binding.recyclerView.clipToPadding = false
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
+        adapter.setOnItemClickListener(object:RecyclerViewMealByCategory.OnItemClick{
+            override fun onClick(position: Int) {
+               val intent = Intent(activity,DetailActivity::class.java)
+                intent.putExtra("detail",meals[position].strMeal)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun setCategory(category: List<Categories.Category>) {

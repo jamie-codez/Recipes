@@ -11,10 +11,18 @@ import com.softech.code.recipe.R
 import com.softech.code.recipe.model.Meals
 import com.squareup.picasso.Picasso
 
-class ViewPagerHeaderAdapter(private val meals: List<Meals.Meal>, private val context: Context) :
+class ViewPagerHeaderAdapter(
+    private val meals: List<Meals.Meal>,
+    private val context: Context,
+    private var listener: OnItemCLick?
+) :
     PagerAdapter() {
-    fun setOnItemClickListener(clickListener: ClickListener?) {
-        Companion.clickListener = clickListener
+    interface OnItemCLick {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemCLick?) {
+        this.listener = listener
     }
 
     override fun getCount(): Int {
@@ -31,19 +39,18 @@ class ViewPagerHeaderAdapter(private val meals: List<Meals.Meal>, private val co
             container,
             false
         )
-        val mealThumb = view.findViewById<ImageView>(R.id.mealThumb)
-        val mealName = view.findViewById<TextView>(R.id.mealName)
-        val strMealThumb: String? = meals[position].strMealThumb
+        val mealThumb: ImageView = view.findViewById(R.id.mealThumb)
+        val mealName: TextView = view.findViewById(R.id.mealName)
+        val strMealThumb: String = meals[position].strMealThumb!!
         Picasso.get().load(strMealThumb).into(mealThumb)
         val strMealName: String? = meals[position].strMeal
         mealName.text = strMealName
-        view.setOnClickListener { v: View? ->
-            clickListener!!.onClick(
-                v,
-                position
-            )
-        }
         container.addView(view, 0)
+        view.setOnClickListener {
+            if (position != POSITION_NONE) {
+                listener!!.onItemClick(position)
+            }
+        }
         return view
     }
 
@@ -51,12 +58,5 @@ class ViewPagerHeaderAdapter(private val meals: List<Meals.Meal>, private val co
         container.removeView(`object` as View)
     }
 
-    interface ClickListener {
-        fun onClick(v: View?, position: Int)
-    }
-
-    companion object {
-        private var clickListener: ClickListener? = null
-    }
 
 }

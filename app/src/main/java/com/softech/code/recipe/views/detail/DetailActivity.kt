@@ -29,34 +29,30 @@ import com.squareup.picasso.Picasso
 
 class DetailActivity : AppCompatActivity(), DetailView {
     private lateinit var repository: FavoriteRepository
-    private var meal: Meals.Meal? = null
-    lateinit var favoriteItem: MenuItem
-    var strMealName: String? = null
-    lateinit var measures: TextView
-    lateinit var ingredients: TextView
-    lateinit var binding: ActivityDetailBinding
+    private lateinit var meal: Meals.Meal
+    private lateinit var favoriteItem: MenuItem
+    private lateinit var strMealName: String
+    private lateinit var measures: TextView
+    private lateinit var ingredients: TextView
+    private lateinit var binding: ActivityDetailBinding
 
-    private var mInterstitialAd: InterstitialAd? = null
+    private lateinit var mInterstitialAd: InterstitialAd
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        repository = FavoriteRepository(application)
-
-
+        repository =
+            FavoriteRepository(application)
         setupActionBar()
-
         val intent = intent
-        strMealName = intent.getStringExtra("extra_detail")
+        strMealName = intent.getStringExtra("extra_detail").toString()
         measures = binding.measure
         ingredients = binding.ingredient
-
         val presenter = DetailPresenter(this)
         presenter.getMealById(strMealName)
-
         mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd!!.adUnitId = resources.getString(R.string.interstitial_ads_id)
-        mInterstitialAd!!.loadAd(AdRequest.Builder().build())
+        mInterstitialAd.adUnitId = resources.getString(R.string.interstitial_ads_id)
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
 
     private fun setupActionBar() {
@@ -71,7 +67,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     private fun setupColorActionBarIcon(favoriteItemColor: Drawable) {
         binding.appbar.addOnOffsetChangedListener(OnOffsetChangedListener { _: AppBarLayout?, verticalOffset: Int ->
-            if (binding.collapsingToolbar.getHeight() + verticalOffset < 2 * ViewCompat.getMinimumHeight(
+            if (binding.collapsingToolbar.height + verticalOffset < 2 * ViewCompat.getMinimumHeight(
                     binding.collapsingToolbar
                 )
             ) {
@@ -123,12 +119,12 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     private fun addOrRemoveToFavorite() {
         if (isFavorite()) {
-            repository.delete(meal!!.strMeal)
+            repository.delete(meal.strMeal)
         } else {
             val mealFavorite = MealFavorite("", "", "")
-            mealFavorite.idMeal = meal!!.idMeal.toString()
-            mealFavorite.strMeal = meal!!.strMeal
-            mealFavorite.strMealThumb = meal!!.strMealThumb
+            mealFavorite.idMeal = meal.idMeal.toString()
+            mealFavorite.strMeal = meal.strMeal
+            mealFavorite.strMealThumb = meal.strMealThumb
             repository.insert(mealFavorite)
         }
         setFavoriteItem()
@@ -159,12 +155,11 @@ class DetailActivity : AppCompatActivity(), DetailView {
         this.meal = meal
         Picasso.get().load(meal.strMealThumb).into(binding.mealThumb)
         binding.collapsingToolbar.title = meal.strMeal
-        binding.category.setText(meal.strCategory)
-        binding.country.setText(meal.strDrinkAlternate)
-        binding.instructions.setText(meal.strInstructions)
+        binding.category.text = meal.strCategory
+        binding.country.text = meal.strDrinkAlternate
+        binding.instructions.text = meal.strInstructions
         setupActionBar()
 
-        //===
         if (meal.strIngredient1!!.isNotEmpty()) {
             ingredients.append(
                 """
@@ -348,7 +343,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
  : ${meal.strMeasure7}"""
             )
         }
-        if (!meal.strMeasure8!!.isEmpty() && !Character.isWhitespace(
+        if (meal.strMeasure8!!.isNotEmpty() && !Character.isWhitespace(
                 meal.strMeasure8!![0]
             )
         ) {
@@ -420,41 +415,17 @@ class DetailActivity : AppCompatActivity(), DetailView {
  : ${meal.strMeasure15}"""
             )
         }
-        if (meal.strMeasure16!!.isNotEmpty() && !Character.isWhitespace(
-                meal.strMeasure16!![0]
-            )
-        ) {
-            measures.append(
-                """
- : ${meal.strMeasure16}"""
-            )
+        if (meal.strMeasure16!!.isNotEmpty() && !Character.isWhitespace(meal.strMeasure16!![0])) {
+            measures.append(": ${meal.strMeasure16}")
         }
-        if (meal.strMeasure17!!.isNotEmpty() && !Character.isWhitespace(
-                meal.strMeasure17!![0]
-            )
-        ) {
-            measures.append(
-                """
- : ${meal.strMeasure17}"""
-            )
+        if (meal.strMeasure17!!.isNotEmpty() && !Character.isWhitespace(meal.strMeasure17!![0])) {
+            measures.append(": ${meal.strMeasure17}")
         }
-        if (meal.strMeasure18!!.isNotEmpty() && !Character.isWhitespace(
-                meal.strMeasure18!![0]
-            )
-        ) {
-            measures.append(
-                """
- : ${meal.strMeasure18}"""
-            )
+        if (meal.strMeasure18!!.isNotEmpty() && !Character.isWhitespace( meal.strMeasure18!![0])) {
+            measures.append(": ${meal.strMeasure18}")
         }
-        if (meal.strMeasure19!!.isNotEmpty() && !Character.isWhitespace(
-                meal.strMeasure19!![0]
-            )
-        ) {
-            measures.append(
-                """
- : ${meal.strMeasure19}"""
-            )
+        if (meal.strMeasure19!!.isNotEmpty() && !Character.isWhitespace(meal.strMeasure19!![0])) {
+            measures.append(": ${meal.strMeasure19}")
         }
         if (meal.strMeasure20!!.isNotEmpty() && !Character.isWhitespace(
                 meal.strMeasure20!![0]
@@ -463,8 +434,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
             measures.append(
                 """
  : ${meal.strMeasure20}"""
-            )
-        }
+            )}
         binding.youtube.setOnClickListener {
             val intentYoutube = Intent(Intent.ACTION_VIEW)
             intentYoutube.data = Uri.parse(meal.strYoutube)
@@ -482,13 +452,13 @@ class DetailActivity : AppCompatActivity(), DetailView {
     }
 
     override fun onBackPressed() {
-        if (mInterstitialAd!!.isLoaded) {
-            mInterstitialAd!!.show()
+        if (mInterstitialAd.isLoaded) {
+            mInterstitialAd.show()
         } else {
             finish()
             Log.d("TAG", "The interstitial wasn't loaded yet.")
         }
-        mInterstitialAd!!.adListener = object : AdListener() {
+        mInterstitialAd.adListener = object : AdListener() {
             override fun onAdClosed() {
                 val handler = Handler()
                 handler.postDelayed({ supportFinishAfterTransition() }, 200)

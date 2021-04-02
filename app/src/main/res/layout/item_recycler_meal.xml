@@ -47,7 +47,7 @@
             android:gravity="center"
             android:maxLines="2"
             android:ellipsize="end"
-            android:id="@+id/mealName"
+            android:id="@+id/mMealName"
             android:layout_below="@id/mealThumb"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"

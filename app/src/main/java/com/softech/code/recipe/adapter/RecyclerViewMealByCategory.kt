@@ -20,15 +20,22 @@ class RecyclerViewMealByCategory(
     private val context: Context,
     private val meals: List<Meals.Meal>,
     private val repository: FavoriteRepository,
-    private var clickListener: ClickListener?
+    private var listener: OnItemClick?
 ) :
     RecyclerView.Adapter<RecyclerViewMealByCategory.RecyclerViewHolder>() {
+    fun setOnItemClickListener(listener: OnItemClick?) {
+        this.listener = listener
+    }
+
+    interface OnItemClick {
+        fun onClick(position: Int)
+    }
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RecyclerViewHolder {
         val view: View = LayoutInflater.from(context).inflate(
             R.layout.item_recycler_meal,
             viewGroup, false
         )
-        return RecyclerViewHolder(view,clickListener)
+        return RecyclerViewHolder(view,listener)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -44,7 +51,7 @@ class RecyclerViewMealByCategory(
             viewHolder.love!!.setImageDrawable(context.resources.getDrawable(R.drawable.ic_favorite_border))
         }
         viewHolder.itemView.setOnClickListener {
-            val mealName: TextView = it.findViewById(R.id.mealName)
+            val mealName: TextView = it.findViewById(R.id.mMealName)
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("detail", mealName.text.toString())
             context.startActivity(intent)
@@ -67,31 +74,18 @@ class RecyclerViewMealByCategory(
         return meals.size
     }
 
-    class RecyclerViewHolder(itemView: View,clickListener: ClickListener?) :
+    class RecyclerViewHolder(itemView: View, onItemClick: OnItemClick?) :
         RecyclerView.ViewHolder(itemView) {
-
         var mealThumb: ImageView? = itemView.findViewById(R.id.mealThumb)
-
-        var mealName: TextView? = itemView.findViewById(R.id.mealName)
-
+        var mealName: TextView? = itemView.findViewById(R.id.mMealName)
         var love: ImageView? = itemView.findViewById(R.id.love)
-        
-
         init {
             itemView.setOnClickListener { 
                 if (adapterPosition!=RecyclerView.NO_POSITION){
-                    clickListener?.onClick(adapterPosition)
+                    onItemClick?.onClick(adapterPosition)
                 }
             }
         }
-    }
-
-    fun setOnItemClickListener(clickListener: ClickListener?) {
-        this.clickListener = clickListener
-    }
-
-    interface ClickListener {
-        fun onClick(position: Int)
     }
 
     private fun addOrRemoveToFavorite(meal: Meals.Meal) {

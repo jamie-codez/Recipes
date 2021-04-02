@@ -22,12 +22,11 @@ class CategoryActivity : AppCompatActivity() {
     }
     private fun initIntent() {
         val intent = intent
-        val categories: List<Categories.Category>? =
-            intent.getSerializableExtra("category") as List<Categories.Category>?
+        val categories: List<Categories.Category> = intent.getSerializableExtra("category") as List<Categories.Category>
         val position = intent.getIntExtra("position", 0)
         val adapter = ViewPagerCategoryAdapter(
             supportFragmentManager,
-            categories!!
+            categories
         )
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
