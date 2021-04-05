@@ -26,8 +26,8 @@ import com.squareup.picasso.Picasso
 class CategoryFragment : Fragment(), CategoryView {
     private lateinit var binding: FragmentCategoryBinding
 
-    private var descDialog: AlertDialog.Builder? = null
-    private var repository: FavoriteRepository? = null
+    private lateinit var descDialog: AlertDialog.Builder
+    private lateinit var repository: FavoriteRepository
 
 
     override fun onCreateView(
@@ -69,13 +69,11 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     private fun onClick() {
-        descDialog!!.setPositiveButton("CLOSE") {
+        descDialog.setPositiveButton("CLOSE") {
                 dialog: DialogInterface, _: Int -> dialog.dismiss()
         }
-        descDialog!!.show()
+        descDialog.show()
     }
-
-
 
     override fun showLoading() {
         binding.progressBar.visibility = VISIBLE
@@ -86,12 +84,14 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     override fun setMeal(meals: List<Meals.Meal>) {
-        val adapter = RecyclerViewMealByCategory(requireActivity(), meals, repository!!,null)
-        binding.recyclerView.layoutManager = GridLayoutManager(activity, 2)
-        binding.recyclerView.clipToPadding = false
-        binding.recyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
-        adapter.setOnItemClickListener(object:RecyclerViewMealByCategory.OnItemClick{
+        val mAdapter = RecyclerViewMealByCategory(requireActivity(), meals, repository!!,null)
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(activity, 2)
+            clipToPadding = false
+            adapter = mAdapter
+        }
+        mAdapter.notifyDataSetChanged()
+        mAdapter.setOnItemClickListener(object:RecyclerViewMealByCategory.OnItemClick{
             override fun onClick(position: Int) {
                val intent = Intent(activity,DetailActivity::class.java)
                 intent.putExtra("detail",meals[position].strMeal)

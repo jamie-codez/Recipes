@@ -41,11 +41,10 @@ class DetailActivity : AppCompatActivity(), DetailView {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        repository =
-            FavoriteRepository(application)
+        repository = FavoriteRepository(application)
         setupActionBar()
         val intent = intent
-        strMealName = intent.getStringExtra("extra_detail").toString()
+        strMealName = intent.getStringExtra("detail").toString()
         measures = binding.measure
         ingredients = binding.ingredient
         val presenter = DetailPresenter(this)
@@ -57,9 +56,11 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     private fun setupActionBar() {
         setSupportActionBar(binding.toolbar)
-        binding.collapsingToolbar.setContentScrimColor(resources.getColor(R.color.colorWhite))
-        binding.collapsingToolbar.setCollapsedTitleTextColor(resources.getColor(R.color.colorPrimary))
-        binding.collapsingToolbar.setExpandedTitleColor(resources.getColor(R.color.colorWhite))
+        binding.collapsingToolbar.apply {
+            setContentScrimColor(resources.getColor(R.color.colorWhite))
+            setCollapsedTitleTextColor(resources.getColor(R.color.colorPrimary))
+            setExpandedTitleColor(resources.getColor(R.color.colorWhite))
+        }
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
@@ -98,7 +99,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
         menuInflater.inflate(R.menu.menu_detail, menu)
         favoriteItem = menu.findItem(R.id.favorite)
         setFavoriteItem()
-        val favoriteItemColor = favoriteItem.getIcon()
+        val favoriteItemColor = favoriteItem.icon
         setupColorActionBarIcon(favoriteItemColor)
         return true
     }
@@ -153,7 +154,7 @@ class DetailActivity : AppCompatActivity(), DetailView {
 
     override fun setMeal(meal: Meals.Meal) {
         this.meal = meal
-        Picasso.get().load(meal.strMealThumb).into(binding.mealThumb)
+        Picasso.get().load(meal.strMealThumb).into(binding.mealThumbDetail)
         binding.collapsingToolbar.title = meal.strMeal
         binding.category.text = meal.strCategory
         binding.country.text = meal.strDrinkAlternate

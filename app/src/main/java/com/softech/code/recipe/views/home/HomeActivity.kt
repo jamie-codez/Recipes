@@ -79,8 +79,10 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
     override fun setMeal(meal: List<Meals.Meal>) {
         val headerAdapter = ViewPagerHeaderAdapter(meal, this, null)
-        binding.viewPagerHeader.adapter = headerAdapter
-        binding.viewPagerHeader.setPadding(20, 0, 20, 0)
+        binding.viewPagerHeader.apply {
+            adapter = headerAdapter
+            setPadding(20, 0, 20, 0)
+        }
         headerAdapter.notifyDataSetChanged()
 
         headerAdapter.setOnItemClickListener(object : ViewPagerHeaderAdapter.OnItemCLick {
@@ -96,13 +98,16 @@ class HomeActivity : AppCompatActivity(), HomeView {
 
     override fun setCategory(category: List<Categories.Category>) {
         val homeAdapter = RecyclerViewHomeAdapter(category, this, null)
-        binding.recyclerCategory.adapter = homeAdapter
-        val layoutManager = GridLayoutManager(
+        val mLayoutManager = GridLayoutManager(
             this, 3,
             GridLayoutManager.VERTICAL, false
+
         )
-        binding.recyclerCategory.layoutManager = layoutManager
-        binding.recyclerCategory.isNestedScrollingEnabled = true
+        binding.recyclerCategory.apply {
+            adapter = homeAdapter
+            layoutManager = mLayoutManager
+            isNestedScrollingEnabled = true
+        }
         homeAdapter.notifyDataSetChanged()
         homeAdapter.setOnItemClickListener(object : RecyclerViewHomeAdapter.OnItemClick {
             override fun onItemClick(position: Int) {

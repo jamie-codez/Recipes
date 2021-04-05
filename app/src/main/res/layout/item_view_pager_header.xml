@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
-                android:id="@+id/mealThumb"
+                android:id="@+id/mealThumbHeader"
                 android:src="@drawable/sample_image_meal"
                 android:layout_width="match_parent"
                 android:scaleType="centerCrop"

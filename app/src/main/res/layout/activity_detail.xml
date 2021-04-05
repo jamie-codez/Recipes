@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="@string/dot_loading">
             <ImageView
-                android:id="@+id/mealThumb"
+                android:id="@+id/mealThumbDetail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -252,8 +252,8 @@
                         android:textColor="#EC2D2D"
                         android:gravity="center_vertical"
                         android:drawablePadding="10dp"
-                        android:drawableLeft="@drawable/ic_play"
-                        android:drawableStart="@drawable/ic_play" />
+                        app:drawableLeftCompat="@drawable/ic_play"
+                        app:drawableStartCompat="@drawable/ic_play" />
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
                     android:layout_weight="1"

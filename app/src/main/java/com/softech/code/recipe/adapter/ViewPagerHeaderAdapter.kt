@@ -39,9 +39,9 @@ class ViewPagerHeaderAdapter(
             container,
             false
         )
-        val mealThumb: ImageView = view.findViewById(R.id.mealThumb)
+        val mealThumb: ImageView = view.findViewById(R.id.mealThumbHeader)
         val mealName: TextView = view.findViewById(R.id.mealName)
-        val strMealThumb: String = meals[position].strMealThumb!!
+        val strMealThumb: String? = meals[position].strMealThumb
         Picasso.get().load(strMealThumb).into(mealThumb)
         val strMealName: String? = meals[position].strMeal
         mealName.text = strMealName

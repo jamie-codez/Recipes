@@ -56,7 +56,7 @@ class RecyclerViewMealByCategory(
             intent.putExtra("detail", mealName.text.toString())
             context.startActivity(intent)
         }
-        viewHolder.love!!.setOnClickListener { v: View? ->
+        viewHolder.love!!.setOnClickListener {
             addOrRemoveToFavorite(meals[i])
             if (strMealName?.let { isFavorite(it) } == true) {
                 viewHolder.love!!.setImageDrawable(
