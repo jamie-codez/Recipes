@@ -98,22 +98,23 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: Recipe-release
-          id: create-release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          with:
-            tag_name: v${{github.run_number}}
-            release_name: v${{github.run_number}}
+      - name: Create release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: v${{github.run_number}}
+          release_name: v${{github.run_number}}
 
       - name: Upload release apk
         id: upload-release-apk
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          with:
-            upload_url: ${{steps.create-release.outputs.upload_url}}
-            asset_path: Recipe-release/app-release-unsigned.apk
-            gitReleaseNotes: true
-            asset_name: Recipe.apk
-            asset_content_type: application/zip
+        with:
+          upload_url: ${{steps.create-release.outputs.upload_url}}
+          asset_path: Recipe-release/app-release-unsigned.apk
+          gitReleaseNotes: true
+          asset_name: Recipe.apk
+          asset_content_type: application/zip
