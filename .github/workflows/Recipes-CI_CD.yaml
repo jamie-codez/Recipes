@@ -66,8 +66,8 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           gitReleaseNotes: true
 
-  generating-release-apk:
-    name: ⚙ Generating release apk
+  generating-release-apk: # Job to generate debug apk
+    name: ⚙ Generate Release APK
     needs: [build,lint-check]
     runs-on: ubuntu-latest
     steps:
@@ -79,6 +79,7 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '11'
+
       - name: Build release apk
         run: ./gradlew assembleRelease --stacktrace
 
@@ -86,11 +87,11 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Recipe-release
-          path: app/build/apk/release/app-release-unsigned.apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
           gitReleaseNotes: true
 
-  create-release:
-    name: 🎊 Create release
+  create-release: # Job to create new github release and upload the generated file
+    name: 🎉 Create release
     needs: [generating-release-apk]
     runs-on: ubuntu-latest
     steps:
@@ -98,22 +99,24 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: Recipe-release
-          id: create-release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          with:
-            tag_name: v${{github.run_number}}
-            release_name: v${{github.run_number}}
 
-      - name: Upload release apk
-        id: upload-release-apk
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: v${{github.run_number}}
+          release_name: v${{github.run_number}}
+
+      - name: Upload Release APK
+        id: upload_release_asset
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          with:
-            upload_url: ${{steps.create-release.outputs.upload_url}}
-            asset_path: Recipe-release/app-release-unsigned.apk
-            gitReleaseNotes: true
-            asset_name: Recipe.apk
-            asset_content_type: application/zip
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: Recipe-release/app-release-unsigned.apk
+          gitReleaseNotes: true
+          asset_name: Recipe.apk
+          asset_content_type: application/zip
