@@ -9,7 +9,6 @@ on:
     tags:
       - 'v*'
 
-
 jobs:
   build:
     name: 🔨 Build
