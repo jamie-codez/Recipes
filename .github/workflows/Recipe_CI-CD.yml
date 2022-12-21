@@ -119,4 +119,3 @@ jobs:
           gitReleaseNotes: true
           asset_name: Recipe.apk
           asset_content_type: application/zip
-
