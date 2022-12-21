@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.softech.code.recipe.model.Categories
 import com.softech.code.recipe.views.category.CategoryFragment
-
 class ViewPagerCategoryAdapter(
     fm: FragmentManager?,
     private val categories: List<Categories.Category>
