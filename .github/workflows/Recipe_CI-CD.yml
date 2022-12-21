@@ -27,7 +27,7 @@ jobs:
         run: chmod +x gradlew
       # Execute build with stacktrace
       - name: Build with gradle
-
+        run: ./gradlew build --stacktrace
   lint-check:
     name: 🔍 lint-checks
     runs-on: ubuntu-latest
