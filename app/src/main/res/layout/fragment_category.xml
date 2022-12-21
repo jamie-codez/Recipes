@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_margin="12dp"
+                android:layout_below="@id/adView"
                 app:cardCornerRadius="10dp"
                 app:cardBackgroundColor="@color/colorPrimary"
                 android:foreground="?attr/selectableItemBackground">
@@ -71,6 +72,7 @@
                 android:layout_height="wrap_content"/>
             <ProgressBar
                 android:id="@+id/progressBar"
+                android:theme="@style/AppTheme.NoActionBar"
                 android:layout_below="@id/cardCategory"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"

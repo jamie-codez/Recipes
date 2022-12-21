@@ -1,6 +1,7 @@
 package com.softech.code.recipe.views.category
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,13 +20,14 @@ import com.softech.code.recipe.databinding.FragmentCategoryBinding
 import com.softech.code.recipe.model.Categories
 import com.softech.code.recipe.model.Meals
 import com.softech.code.recipe.utils.Utils
+import com.softech.code.recipe.views.detail.DetailActivity
 import com.squareup.picasso.Picasso
 
 class CategoryFragment : Fragment(), CategoryView {
     private lateinit var binding: FragmentCategoryBinding
 
-    private var descDialog: AlertDialog.Builder? = null
-    private var repository: FavoriteRepository? = null
+    private lateinit var descDialog: AlertDialog.Builder
+    private lateinit var repository: FavoriteRepository
 
 
     override fun onCreateView(
@@ -39,7 +41,8 @@ class CategoryFragment : Fragment(), CategoryView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        repository = FavoriteRepository(requireActivity().application)
+        repository =
+            FavoriteRepository(requireActivity().application)
 
         if (arguments != null) {
             binding.textCategory.text = requireArguments().getString("EXTRA_DATA_DESC")
@@ -66,13 +69,11 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     private fun onClick() {
-        descDialog!!.setPositiveButton(
-            "CLOSE"
-        ) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
-        descDialog!!.show()
+        descDialog.setPositiveButton("CLOSE") {
+                dialog: DialogInterface, _: Int -> dialog.dismiss()
+        }
+        descDialog.show()
     }
-
-
 
     override fun showLoading() {
         binding.progressBar.visibility = VISIBLE
@@ -83,11 +84,20 @@ class CategoryFragment : Fragment(), CategoryView {
     }
 
     override fun setMeal(meals: List<Meals.Meal>) {
-        val adapter = RecyclerViewMealByCategory(requireActivity(), meals, repository!!,null)
-        binding.recyclerView.layoutManager = GridLayoutManager(activity, 2)
-        binding.recyclerView.clipToPadding = false
-        binding.recyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
+        val mAdapter = RecyclerViewMealByCategory(requireActivity(), meals, repository!!,null)
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(activity, 2)
+            clipToPadding = false
+            adapter = mAdapter
+        }
+        mAdapter.notifyDataSetChanged()
+        mAdapter.setOnItemClickListener(object:RecyclerViewMealByCategory.OnItemClick{
+            override fun onClick(position: Int) {
+               val intent = Intent(activity,DetailActivity::class.java)
+                intent.putExtra("detail",meals[position].strMeal)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun setCategory(category: List<Categories.Category>) {

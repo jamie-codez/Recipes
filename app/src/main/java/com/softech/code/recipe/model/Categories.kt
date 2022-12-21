@@ -4,11 +4,10 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-
 data class Categories(
     @SerializedName("categories")
     @Expose
-    var categories: List<Category>
+    var categories: List<Category>? = null
 ) : Serializable {
 
     data class Category(
@@ -24,5 +23,7 @@ data class Categories(
         @SerializedName("strCategoryDescription")
         @Expose
         var strCategoryDescription: String?
-    ) : Serializable
+    ) : Serializable {
+
+    }
 }

@@ -9,8 +9,6 @@ data class Meals(
     @Expose
     var meals: List<Meal>?
 ) {
-
-
     data class Meal(
         @SerializedName("idMeal")
         @Expose

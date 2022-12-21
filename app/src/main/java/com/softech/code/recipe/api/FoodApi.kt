@@ -8,6 +8,8 @@ import retrofit2.http.Query
 
 interface FoodApi {
     @GET("latest.php")
+    fun getMealE():Call<Meals>
+    @GET("random.php")
     fun getMeal():Call<Meals>
     @GET("categories.php")
     fun getCategories():Call<Categories>
