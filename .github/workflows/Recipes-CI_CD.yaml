@@ -16,17 +16,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       # Set up JDK
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
           java-version: '11'
+
       # Make gradle executable
       - name: Make gradle executable
         run: chmod +x gradlew
+
       # Execute build with stacktrace
       - name: Build with gradle
+        run: ./gradlew build --stacktrace
 
   lint-check:
     name: 🔍 lint-checks
@@ -49,15 +53,19 @@ jobs:
     needs: [build,lint-check]
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up JDK 11
         uses: actions/checkout@v3
         with:
           distribution: 'corretto'
           java-version: '11'
+
       - name: Build debug apk
         run: ./gradlew assembleDebug --stacktrace
+
       - name: Upload debug apk
         uses: actions/upload-artifact@v1
         with:
